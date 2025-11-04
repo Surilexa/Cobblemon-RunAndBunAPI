@@ -139,14 +139,6 @@ public class TrainerNPC implements Trainer {
     public void setEntity(@NotNull LivingEntity entity) {
         this.entity = entity;
         this.entityName = Text.literal(entity.getDisplayName().getString());
-
-        entity.setDeltaMovement(Vec3.ZERO);
-        entity.setNoGravity(true);
-        if (entity instanceof Mob mob) {
-            mob.setNoAi(true);
-        }
-        entity.noPhysics = true;
-        entity.teleportTo(entity.getX(), entity.getY(), entity.getZ());
     }
 
     /**
