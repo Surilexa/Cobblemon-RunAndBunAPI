@@ -156,6 +156,7 @@ public class RunBunAI implements BattleAI {
         ElementalType activePrimaryType = null;
         ElementalType activeSecondaryType = null;
         double activePokemonPercentHP = 0;
+        double activePokemonCurrentHP = 0;
         ActiveBattlePokemon NPCPartner = null;
 
 
@@ -223,7 +224,9 @@ public class RunBunAI implements BattleAI {
             activePrimaryType = battlePokemon.getEffectedPokemon().getPrimaryType();
             activeSecondaryType = battlePokemon.getEffectedPokemon().getSecondaryType();
             activePokemonPercentHP = getCurrentPercentHP(battlePokemon);
+            activePokemonCurrentHP = battlePokemon.getHealth();
             currentAbility = battlePokemon.getEffectedPokemon().getAbility().getDisplayName();
+            
 
             npcStages = getStageMap(battlePokemon);
             if (battlePokemon.getHeldItemManager().showdownId(battlePokemon) != null) {
@@ -1018,7 +1021,7 @@ public class RunBunAI implements BattleAI {
                                 if (oppMoves.contains(soundMoves)) {
                                     score += -8;
                                 }
-                                if(activePokemonPercentHP > 50 || opponentAbility.equals("infiltrator")){
+                                if(activePokemonPercentHP <= 50 || opponentAbility.equals("infiltrator")){
                                     score = -20;
                                 }
                                 score -= roll > .5 ? 1: 0;
@@ -1216,7 +1219,35 @@ public class RunBunAI implements BattleAI {
                                     score += roll > .75 ? -1:0;
                                 }
                                 break;
+                            case "ruination":
+                                roll = RANDOM.nextDouble();
+                                if ((opponent.getHealth() / 2) > maxDamage){
+                                    score += roll > .4 ? 9:7;
+                                }
+                                break;
+                            case "revivalblessing":
 
+                                break;
+
+                            case "shedtail":
+                                if(isFaster){
+                                    if(activePokemonPercentHP > .5 && maxDamage < oppMaxDamage ){
+                                        score += 8;
+                                    }
+                                    else{
+                                        score -= 20;
+                                    }
+                                }
+                                if(!isFaster){
+                                    if(activePokemonCurrentHP - oppMaxDamage > .5 && maxDamage < oppMaxDamage){
+                                        score += 8;
+                                    }
+                                    else{
+                                        score -= 20;
+                                    }
+                                }
+                                break;
+                            
                         }
                     }
                     //TODO: START OF GENERAL SETUP CODE
