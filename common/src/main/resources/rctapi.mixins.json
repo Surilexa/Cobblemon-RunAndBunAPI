@@ -6,7 +6,6 @@
   "client": [
     "client.BattleGUIMixin",
     "client.BattleFaintHandlerMixin",
-    "client.BattleMessageHandlerMixin",
     "client.BattleQueueRequestHandlerMixin"
   ],
   "mixins": [

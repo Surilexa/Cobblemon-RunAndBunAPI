@@ -1,20 +1,20 @@
 /*
- * This file is part of Radical Cobblemon Trainers API.
- * Copyright (c) 2025, HDainester, All rights reserved.
- *
- * Radical Cobblemon Trainers API is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Radical Cobblemon Trainers API is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
- * more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along
- * with Radical Cobblemon Trainers API. If not, see <http://www.gnu.org/licenses/lgpl>.
- */
+    * This file is part of Radical Cobblemon Trainers API.
+    * Copyright (c) 2025, HDainester, All rights reserved.
+    *
+    * Radical Cobblemon Trainers API is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU Lesser General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * Radical Cobblemon Trainers API is distributed in the hope that it will be useful, but
+    * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
+    * more details.
+    *
+    * You should have received a copy of the GNU Lesser General Public License along
+    * with Radical Cobblemon Trainers API. If not, see <http://www.gnu.org/licenses/lgpl>.
+    */
 package com.gitlab.srcmc.rctapi.api.util;
 
 import java.io.IOException;
@@ -66,17 +66,17 @@ public class JTO<T> implements Serializable {
         this.func = () -> {
             var tt = TypeToken.of(Wrapper.<T>clazz());
             var parsers = JTO.PARSERS.getOrDefault(tt, Map.of());
-    
+
             @SuppressWarnings("unchecked")
             var parser = (Parser<T>)parsers.get(this.type);
-    
+
             if(parser != null) {
                 this.target = parser.func.apply(this.data);
                 this.func = () -> this.target;
             } else {
                 ModCommon.LOG.error(String.format("No JTO parser registered for type '%s'", this.type));
             }
-            
+
             return this.target;
         };
     }
@@ -93,11 +93,11 @@ public class JTO<T> implements Serializable {
     }
 
     /**
-     * Parsers this JTO into an object of the target type and returns it. If the object
+     * Parses this JTO into an object of the target type and returns it. If the object
      * has been parsed before the same reference is returned. Returns null if no
      * appropriate parser could be found (see {@link JTO#registerParser(String,
      * Function)}).
-     * 
+     *
      * @return Target object.
      */
     public T get() {
@@ -107,7 +107,7 @@ public class JTO<T> implements Serializable {
     /**
      * Registers a json parser for the provided type name and generic type. The type
      * name is case insensitive.
-     * 
+     *
      * @param <T> Generic type to register a parser for.
      * @param type Type name of the parser.
      * @param func Parser function.
@@ -123,14 +123,14 @@ public class JTO<T> implements Serializable {
         if(parsers.containsKey(type)) {
             throw new IllegalArgumentException("A parser for the type '" + type + "' is already registered");
         }
-        
+
         parsers.put(type, new Parser<>(func));
     }
 
     /**
      * Registers a json parser for the provided type name and generic model type in
      * addition to a converter, from the model type to the given generic target type.
-     * 
+     *
      * @param <Model> Generic model type targeted by the parser.
      * @param <T> Generic type to register a parser for.
      * @param type Type name of the parser.
@@ -145,16 +145,16 @@ public class JTO<T> implements Serializable {
 
         JTO.registerParser(type, jso -> {
             var model = jso != null
-                ? GSON.fromJson(jso, clazz)
-                : defaultModel.get();
-                
+                    ? GSON.fromJson(jso, clazz)
+                    : defaultModel.get();
+
             return converter.apply(model);
         });
     }
 
     /**
      * Creates a default JTO instance for the given generic type.
-     * 
+     *
      * @param <T> Generic type provided by this JTO.
      * @param supplier Supplier to provide an instance of the target type.
      * @return New JTO instance.

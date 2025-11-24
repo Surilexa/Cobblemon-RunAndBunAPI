@@ -28,6 +28,8 @@ import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.net.PacketRegisterInfo;
 import com.gitlab.srcmc.rctapi.client.network.handler.BattleDispatchesCompleteHandler;
 import com.gitlab.srcmc.rctapi.client.network.packet.BattleDispatchesCompletePacket;
+import com.gitlab.srcmc.rctapi.client.network.packet.BattleTurnPacket;
+import com.gitlab.srcmc.rctapi.client.network.handler.BattleTurnHandler;
 
 @Mixin(CobblemonNetwork.class)
 public abstract class CobblemonNetworMixin {
@@ -35,5 +37,6 @@ public abstract class CobblemonNetworMixin {
     @Inject(method = "generateS2CPacketInfoList", at = @At("TAIL"), remap = false)
     private void injectGenerateS2CPacketInfoList(CallbackInfoReturnable<List<PacketRegisterInfo<?>>> cir) {
         cir.getReturnValue().add(new PacketRegisterInfo<>(BattleDispatchesCompletePacket.ID, BattleDispatchesCompletePacket::decode, new BattleDispatchesCompleteHandler(), null));
+        cir.getReturnValue().add(new PacketRegisterInfo<>(BattleTurnPacket.ID, buf -> BattleTurnPacket.decode(buf), new BattleTurnHandler(), null));
     }
 }

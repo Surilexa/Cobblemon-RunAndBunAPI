@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+import com.gitlab.srcmc.rctapi.client.network.packet.BattleTurnPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -79,6 +80,12 @@ public abstract class PokemonBattleMixin {
     abstract List<ServerPlayer> getPlayers();
 
     private boolean $dispatchesComplete;
+
+
+    @Inject(method = "turn", at = @At("HEAD"), remap = false)
+    private void injectTurn(int n, CallbackInfo ci) {
+        CobblemonNetwork.INSTANCE.sendPacketToPlayers(this.getPlayers(), new BattleTurnPacket());
+    }
 
     @Inject(method = "tick", at = @At("TAIL"), remap = false)
     private void injectTick(CallbackInfo ci) {

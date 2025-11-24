@@ -15,43 +15,38 @@
  * You should have received a copy of the GNU Lesser General Public License along
  * with Radical Cobblemon Trainers API. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
-package com.gitlab.srcmc.rctapi.mixins.client;
+package com.gitlab.srcmc.rctapi.client.network.handler;
 
 import java.util.stream.Stream;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType;
+import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler;
 import com.cobblemon.mod.common.client.CobblemonClient;
-import com.cobblemon.mod.common.client.net.battle.BattleMessageHandler;
-import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket;
 import com.gitlab.srcmc.rctapi.client.ModClient;
+import com.gitlab.srcmc.rctapi.client.network.packet.BattleTurnPacket;
+import com.gitlab.srcmc.rctapi.mixins.client.BattleFaintHandlerMixin;
+import com.gitlab.srcmc.rctapi.mixins.client.BattleGUIMixin;
+import com.gitlab.srcmc.rctapi.mixins.client.BattleQueueRequestHandlerMixin;
 
 import net.minecraft.client.Minecraft;
 
-@Mixin(BattleMessageHandler.class)
-public abstract class BattleMessageHandlerMixin {
+public class BattleTurnHandler implements ClientNetworkPacketHandler<BattleTurnPacket> {
     /**
      * End of turn faint softlock 'fix'.
-     * 
+     *
      * Triggered by pokemon fainting at the end of turn on both sides and the player
      * selecting a pokemon to switch in very quickly (tested with 'Perish Song').
-     * 
+     *
      * @see {@link BattleGUIMixin#injectSelectAction}
      * @see {@link BattleFaintHandlerMixin#injectHandle}
      * @see {@link BattleQueueRequestHandlerMixin#injectHandle}
      */
-    @Inject(method = "handle", at = @At("HEAD"), remap = false, cancellable = true)
-    private void injectHandle(BattleMessagePacket packet, Minecraft client, CallbackInfo ci) {
+    @Override
+    public void handle(BattleTurnPacket arg0, Minecraft arg1) {
         var battle = CobblemonClient.INSTANCE.getBattle();
 
         if(battle != null && Stream.of(battle.getSides()).anyMatch(s -> s.getActors().stream().anyMatch(a -> a.getType().equals(ActorType.NPC)))) {
-            if(packet.getMessages().stream().anyMatch(m -> m.toString().contains("cobblemon.battle.turn"))) {
-                ModClient.BATTLE_STATE.reset();
-            }
+            ModClient.BATTLE_STATE.reset();
         }
     }
 }
