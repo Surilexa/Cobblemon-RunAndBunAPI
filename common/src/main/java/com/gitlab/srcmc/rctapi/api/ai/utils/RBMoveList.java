@@ -18,7 +18,8 @@ public class RBMoveList {
             "suckerpunch",
             "thunderclap",
             "vacuumwave",
-            "watershuriken"
+            "watershuriken",
+            "jetpunch"
     ));
     private static final List<String> abilityStatBooster = new ArrayList<>(List.of(
             "cobblemon.ability.moxie",
@@ -107,7 +108,8 @@ public class RBMoveList {
             "coil",
             "noretreat",
             "tidyup",
-            "geomancy"));
+            "geomancy",
+            "filletaway"));
     private static final List<String> ignoreStatDropAbilities = new ArrayList<>(List.of(
             "cobblemon.ability.contrary",
             "cobblemon.ability.clearbody",
@@ -126,7 +128,11 @@ public class RBMoveList {
             "stickyweb",
             "protect",
             "kingsshield",
+            "burningbulwark",
             "detect",
+            "obstruct",
+            "silktrap",
+            "banefulbunker",
             "fling",
             "roleplay",
             "shadowsneak",
@@ -183,7 +189,12 @@ public class RBMoveList {
             "sandstorm",
             "chillyreception",
             "hail",
-            "snowscape"));
+            "snowscape",
+            "bloodmoon",
+            "gigatonhammer",
+            "revivalblessing",
+            "ruination",
+            "shedtail"));
 
     private static final List<String> soundMoves = new ArrayList<>(List.of ("alluringvoice",
             "boomburst",
